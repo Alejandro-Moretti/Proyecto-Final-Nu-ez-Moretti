@@ -330,3 +330,6 @@ SistemaTanques sistema(&s1, &s2, &s3, &s4, 10, 11, 13, 12);
 void setup() {
   sistema.iniciar();
 }
+void loop() {
+  sistema.actualizar();
+}
