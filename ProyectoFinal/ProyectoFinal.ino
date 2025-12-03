@@ -271,7 +271,7 @@ public:
         if (i < sensoresCantidad - 1){
 			Serial.print(",");
 		}
-        if (p >= 103){
+        if (p < 0 || p >= 103){
           hayEmergencia = true;
         } 
       delay(10);    
