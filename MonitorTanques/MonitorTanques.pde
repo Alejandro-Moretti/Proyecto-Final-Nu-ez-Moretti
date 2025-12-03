@@ -5,7 +5,7 @@ import processing.serial.*;
 final String COM_PORT = "COM7"; 
 final int BAUD = 9600;
 // Usamos sketchPath para que se guarde en la carpeta del programa
-String LOG_PATH; 
+String LOG_PATH;
 
 // ------------------ ESTADO ------------------
 float nivel1 = 0, nivel2 = 0, nivel3 = 0, nivel4 = 0;
@@ -146,12 +146,11 @@ void verificarEstadoTanque(int id, float nivel) {
   if (nivel > 100 && !Rebalse) {
     registrarEvento(id, nivel, "REBALSE");
     println("⚠️ T" + id + " REBALSANDO");
-    enviarAlertaArduino(id);
     setRebalse(id, true); // Actualizamos flag
   }
   
   // CASO 2: Se normaliza (Baja a 100 o menos)
-  else if (nivel <= 100 && Rebalse) {
+  else if ( nivel >0 && nivel <= 100 && Rebalse) {
     registrarEvento(id, nivel, "NORMALIZADO");
     println("✅ T" + id + " Normalizado");
     setRebalse(id, false); // Actualizamos flag
@@ -164,8 +163,8 @@ void verificarEstadoTanque(int id, float nivel) {
       setError(id, true); // Actualizamos flag de error
     }
     else if(nivel >= 0 && Error){
-      registrarEvento(id, nivel, "SENSOR OK");
-      println("✅ T" + id + " SENSOR OK");
+      registrarEvento(id, nivel, "SENSOR ARREGLADO");
+      println("✅ T" + id + " SENSOR ARREGLADO");
       setError(id, false); // Actualizamos flag de error
     }
 }
@@ -182,14 +181,6 @@ void setError(int id, boolean estado) {
   if (id == 2) err2 = estado;
   if (id == 3) err3 = estado;
   if (id == 4) err4 = estado;
-}
-
-
-void enviarAlertaArduino(int tanque) {
-  if (puertoConectado) {
-    Mipuerto.write('R'); 
-    Mipuerto.write(char('0' + tanque)); 
-  }
 }
 
 void registrarEvento(int tanque, float porcentaje, String evento) {
